@@ -8,7 +8,7 @@ function launchDisplay() {
 function startScenario(type) {
   if (!displayWindow) return alert("Ouvre d'abord la fenêtre d'affichage.");
   const scenarios = {
-    escrime: [180],
+    escrime: [60],
     behourd: [60, 30, 60],
     profight1: [120, 60, 120, 60, 120],
     profight2: [180, 60, 180, 60, 180]
