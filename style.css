@@ -82,3 +82,6 @@ button:active {
   background: green;
   transition: width 1s linear, background-color 1s linear;
 }
+.escrime{
+  display: none;
+}
