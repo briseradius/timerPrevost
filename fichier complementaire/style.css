@@ -1,0 +1,57 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+#controls, #presets {
+  margin: 15px 0;
+}
+
+input {
+  width: 60px;
+  padding: 5px;
+  margin: 0 5px;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+#display {
+  font-size: 48px;
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+#progressContainer {
+  width: 100%;
+  background: #ccc;
+  height: 30px;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 100%;
+  background: green;
+  transition: width 1s linear, background-color 1s linear;
+}
+
+.red-blink {
+  color: red;
+  animation: blink 1s step-start 0s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}

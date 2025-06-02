@@ -1,0 +1,84 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #111;
+  color: white;
+  padding: 20px;
+}
+button {
+  font-size: 1.2rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s, box-shadow 0.2s, transform 0.1s;
+  margin-bottom: 10px;
+}
+
+/* Style neutre pour les autres boutons */
+button:not(#pauseBtn, #resetBtn) {
+  background-color: #4c77af; /* vert par défaut */
+  box-shadow: 0 6px #3e618e;
+}
+
+button:not(#pauseBtn , #resetBtn):hover {
+  background-color: #45a049;
+}
+
+/* Pause button en rouge */
+#pauseBtn{
+  background-color: #e74c3c;  /* rouge */
+
+}
+#pauseBtn:hover {
+  background-color: #c0392b;
+}
+#resetBtn{
+  background-color: #616264;  /* rouge */
+}
+#resetBtn:hover {
+  background-color: #c0392b;
+}
+#pauseBtn.pause {
+  background-color: #e74c3c;  /* rouge */
+}
+
+#pauseBtn.pause:hover {
+  background-color: #c0392b;
+}
+
+/* Play button en vert */
+#pauseBtn.play {
+  background-color: #27ae60; /* vert */
+  box-shadow: 0 6px #1e8449;
+}
+
+#pauseBtn.play:hover {
+  background-color: #229954;
+}
+
+button:active {
+  box-shadow: 0 3px rgba(0,0,0,0.2);
+  transform: translateY(3px);
+}
+
+.timer {
+  font-size: 80px;
+  margin: 20px 0;
+}
+#progressContainer {
+  width: 80%;
+  height: 30px;
+  background: #444;
+  margin: auto;
+  border-radius: 15px;
+  overflow: hidden;
+}
+#progressBar {
+  height: 100%;
+  width: 100%;
+  background: green;
+  transition: width 1s linear, background-color 1s linear;
+}

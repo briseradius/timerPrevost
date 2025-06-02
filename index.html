@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contrôleur Chrono</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Contrôleur Chronomètre</h1>
+
+  <button onclick="launchDisplay()">Lancer l'affichage</button>
+
+  <h2>Scénarios prédéfinis</h2>
+  <div>
+    <button onclick="startScenario('escrime')">Escrime</button>
+    <span> 1 min</span>
+  </div>
+  <div>
+    <button onclick="startScenario('behourd')">Béhourd</button>
+    <span>1 min / 30 s / 1 min</span>
+  </div>
+  <div>
+    <button onclick="startScenario('profight1')">Profight 1</button>
+    <span>2 min / 1 min / 2 min / 1 min / 2 min</span>
+  </div>
+  <div>
+    <button onclick="startScenario('profight2')">Profight 2</button>
+    <span>3 min / 1 min / 3 min / 1 min / 3 min</span>
+  </div>
+
+  <h2>Chrono personnalisé</h2>
+  <div>
+    <label for="customMin">Minutes :</label>
+    <input type="number" id="customMin" value="1" min="0">
+    <label for="customSec">Secondes :</label>
+    <input type="number" id="customSec" value="0" min="0" max="59">
+    <button onclick="startCustom()">Chrono perso</button>
+  </div>
+
+  <h2>Contrôles</h2>
+  <div>
+    <button onclick="pauseResume()" id="pauseBtn">Pause</button>
+    <button onclick="reset()" id="resetBtn">Reset</button>
+  </div>
+
+  <script src="controller.js"></script>
+</body>
+</html>

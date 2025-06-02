@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Minuteur Modulaire</title>
+</head>
+<body>
+  <a href="https://obsproject.com/" target="_blank" rel="noopener">
+  <button class="backBtn">OBS</button>
+</a>
+
+  <h1>Minuteur - Multi Modes</h1>
+  <div id="presets">
+    <button onclick="loadPreset('escrime')">Escrime</button>
+    <button onclick="loadPreset('behourd')">Béhourd</button>
+    <button onclick="loadPreset('profight1')">Profight 2-1-2-1-2</button>
+    <button onclick="loadPreset('profight2')">Profight 3-1-3-1-3</button>
+  </div>
+  <div id="controls">
+    <label>Minutes:</label><input type="number" id="minutes" value="1" placeholder="temp">
+    <label>Secondes:</label><input type="number" id="seconds" value="0" placeholder="temp">
+    <button onclick="startTimer()">Démarrer</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Réinitialiser</button>
+  </div>
+  <div id="display">01:00</div>
+  <div id="progressContainer"><div id="progressBar"></div></div>
+  <script src="script.js"></script>
+</body>
+</html>
