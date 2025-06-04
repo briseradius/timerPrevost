@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fenêtre principale</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="ouvrirFenetre()">Ouvrir une fenêtre</button>
+  <button onclick="changerCouleurTexte()">Changer la couleur du texte</button>
+
+  <script>
+    let popup = null;
+
+    function ouvrirFenetre() {
+      popup = window.open('popup.html', 'PopupWindow', 'width=400,height=300');
+    }
+
+    function changerCouleurTexte() {
+      if (popup && !popup.closed) {
+        popup.changerCouleur(); // Appelle une fonction définie dans popup.html
+      } else {
+        alert("Veuillez d'abord ouvrir la fenêtre.");
+      }
+    }
+  </script>
+</body>
+</html>

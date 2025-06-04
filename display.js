@@ -6,6 +6,7 @@ let totalTime = 0;
 let elapsed = 0;
 let paused = false;
 let inStopPhase = false;
+let isCustom = false;
 
 const display = document.getElementById("timeDisplay");
 const progressBar = document.getElementById("progressBar");
@@ -25,60 +26,74 @@ function updateProgress() {
     progressBar.style.backgroundColor = "red";
   } else if (timeLeft <= 30) {
     progressBar.style.backgroundColor = "orange";
+    display.style.color = "white";
   } else {
     progressBar.style.backgroundColor = "green";
+    display.style.color = "white";
   }
 }
 
-function showIntermediateStop(callback) {
+function shouldHaveStopPhase(current, next) {
+  if ((current === 120 || current === 180) && next === 60) return true;
+  if (current === 60 && next === 30) return true;
+  return false;
+}
+
+function showIntermediateStop(callback, forceStop = false) {
   inStopPhase = true;
-  let stopSeconds = 5;
-  display.textContent = "STOP";
-  display.style.color = "red";
+  const stopSeconds = 5;
+
+  const previousDuration = steps[currentStep - 1];
+  const nextDuration = steps[currentStep];
+
+  let message = "GO";
+  let color = "limegreen";
+
+  if (forceStop || shouldHaveStopPhase(previousDuration, nextDuration)) {
+    message = "STOP";
+    color = "red";
+  }
+
+  display.textContent = message;
+  display.style.color = color;
   progressBar.style.width = "0%";
-  progressBar.style.backgroundColor = "red";
+  progressBar.style.backgroundColor = color;
 
   const stopStart = Date.now();
 
   const stopTimer = setInterval(() => {
     if (!paused) {
-      const elapsed = Math.floor((Date.now() - stopStart) / 1000);
-
-      if (elapsed >= 5) {
+      const stopElapsed = Math.floor((Date.now() - stopStart) / 1000);
+      if (stopElapsed >= stopSeconds) {
         clearInterval(stopTimer);
-        display.style.visibility = "visible";
         display.style.color = "white";
         inStopPhase = false;
         callback();
-        return;
-      }
-
-      // Clignotement rapide pendant les 2 dernières secondes (soit à partir de 3 secondes écoulées)
-      if (elapsed >= 3) {
-        display.style.visibility = (display.style.visibility === "hidden") ? "visible" : "hidden";
-      } else {
-        display.style.visibility = "visible";
       }
     }
-  }, 100); // ← 100ms = 10 fois par seconde
+  }, 200);
 }
 
-
-function runStep() {
+function startNextStep() {
   if (currentStep >= steps.length) {
-    display.textContent = "STOP";
-    display.style.visibility = "visible";
-    display.style.color = "red";
+    display.textContent = "FIN DU COMBAT";
     progressBar.style.width = "0%";
-    progressBar.style.backgroundColor = "red";
+    display.style.color = "white";
+
+    if (isCustom) {
+      showIntermediateStop(() => {}, true);
+    }
     return;
   }
 
   timeLeft = steps[currentStep];
   totalTime = timeLeft;
   elapsed = 0;
-  display.style.color = "white";
   display.textContent = formatTime(timeLeft);
+  updateProgress();
+
+  // Envoie la mise à jour du temps toutes les secondes
+  sendTimeUpdate();
 
   timer = setInterval(() => {
     if (!paused) {
@@ -87,40 +102,54 @@ function runStep() {
       display.textContent = formatTime(timeLeft);
       updateProgress();
 
+      sendTimeUpdate();
+
       if (timeLeft <= 0) {
         clearInterval(timer);
-        showIntermediateStop(() => {
-          currentStep++;
-          runStep();
-        });
+        currentStep++;
+
+        if (currentStep < steps.length) {
+          showIntermediateStop(startNextStep);
+        } else {
+          display.textContent = "FIN";
+          progressBar.style.width = "0%";
+          display.style.color = "white";
+
+          if (isCustom) {
+            showIntermediateStop(() => {}, true);
+          }
+        }
       }
     }
   }, 1000);
 }
 
-window.addEventListener("message", (e) => {
-  const { action, durations } = e.data;
-  if (action === "start") {
-    clearInterval(timer);
-    steps = durations;
+function sendTimeUpdate() {
+  if (window.opener) {
+    window.opener.postMessage({ action: "timeUpdate", timeLeft: timeLeft }, "*");
+  }
+}
+
+window.addEventListener("message", (event) => {
+  if (!event.data) return;
+
+  if (event.data.action === "start") {
+    steps = event.data.durations;
+    isCustom = event.data.isCustom || false;
     currentStep = 0;
-    runStep();
-  } else if (action === "pause") {
-    paused = true;
-  } else if (action === "resume") {
     paused = false;
-  } else if (action === "reset") {
-    clearInterval(timer);
-    steps = [];
-    currentStep = 0;
-    timeLeft = 0;
-    totalTime = 0;
-    elapsed = 0;
     inStopPhase = false;
-    display.textContent = "00:00";
-    display.style.visibility = "visible";
-    progressBar.style.width = "100%";
-    progressBar.style.backgroundColor = "green";
-    display.style.color = "white";
+    clearInterval(timer);
+    startNextStep();
+  } else if (event.data.action === "pause") {
+    paused = true;
+  } else if (event.data.action === "resume") {
+    paused = false;
+  } else if (event.data.action === "reset") {
+    clearInterval(timer);
+    currentStep = 0;
+    paused = false;
+    inStopPhase = false;
+    startNextStep();
   }
 });
